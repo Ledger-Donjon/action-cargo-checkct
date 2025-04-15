@@ -1,0 +1,23 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Clone test projects
+        shell: bash
+        run: |
+          git clone https://github.com/Ledger-Donjon/cargo-checkct tests
+            
+      - uses: ./
+        with:
+          directory: tests/examples/secp256K1/
+          binsec-version: latest
+          unisim-version: latest
+          timout: 300
