@@ -10,6 +10,7 @@ with:
     directory: ./example
     binsec-version: 0.10.0
     unisim-version: 0.0.10
+    skip_unknown: false
     timeout: 600
 ```
 
@@ -32,6 +33,12 @@ This parameter is optional. By default the latest `binsec` version will be used.
 Enforce the used `unisim-archsec` version.
 
 This parameter is optional. By default the latest `unisim-archsec` version will be used.
+
+### Parameter: skip_unknown
+
+Do not raise an error if `binsec` cannot conclude on the tested implementation.
+
+This parameter is optional. By default, the flag is not set (`false`).
 
 ### Parameter: timeout
 

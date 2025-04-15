@@ -20,4 +20,4 @@ jobs:
           directory: tests/examples/secp256K1/
           binsec-version: latest
           unisim-version: latest
-          timout: 300
+          timeout: 300

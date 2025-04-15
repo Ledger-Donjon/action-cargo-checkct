@@ -13,6 +13,10 @@ inputs:
     description: 'unisim_archisec version'
     required: false
     default: 'latest'
+  skip-unknown: # Don't fail if binsec result status is unknown
+    description: 'do not raise an error if binsec cannot conclude on the tested implementation'
+    required: false
+    default: 'false'
   timeout: # Timeout
     description: 'cargo-checktct timeout in seconds'
     required: false
@@ -21,13 +25,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Configure rustup
-      shell: bash
-      run: |
-        rustup update --no-self-update nightly
-        rustup component add --toolchain nightly rust-src
-        rustup default nightly
-
     - name: Install Binsec
       shell: bash
       run: |
@@ -64,14 +61,21 @@ runs:
 
     - name: Install cargo-checkct
       run: |
-        git clone https://github.com/Ledger-Donjon/cargo-checkct
+        git clone -b "fix/stack_protector" https://github.com/Ledger-Donjon/cargo-checkct
         cd cargo-checkct
         cargo b --release
       shell: bash
 
     - name: Run cargo-checkct
-      run: ./cargo-checkct/target/release/cargo-checkct run -d "$DIRECTORY" -t "$TIMEOUT"
+      run: |
+        eval $(opam env)
+        if [[ "$SKIP_UNKNOWN" == "true" ]]; then
+          ./cargo-checkct/target/release/cargo-checkct run -d "$DIRECTORY" -t "$TIMEOUT" --skip_unknown
+        else
+          ./cargo-checkct/target/release/cargo-checkct run -d "$DIRECTORY" -t "$TIMEOUT"
+        fi
       shell: bash
       env:
         DIRECTORY: ${{ inputs.directory }}
         TIMEOUT: ${{ inputs.timeout }}
+        SKIP_UNKNOWN: ${{ inputs.skip_unknown }}
