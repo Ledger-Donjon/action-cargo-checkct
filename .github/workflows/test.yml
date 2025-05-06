@@ -17,7 +17,4 @@ jobs:
             
       - uses: ./
         with:
-          directory: tests/examples/secp256K1/
-          binsec-version: latest
-          unisim-version: latest
-          timeout: 300
+          directory: tests/examples/chachapoly/

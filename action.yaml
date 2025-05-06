@@ -8,11 +8,11 @@ inputs:
   binsec-version:  # Binsec version to use
     description: 'binsec version'
     required: false
-    default: 'latest'
+    default: '0.10.0'
   unisim-version:  # Unisim_archisec version to use
     description: 'unisim_archisec version'
     required: false
-    default: 'latest'
+    default: '0.0.10'
   skip-unknown: # Don't fail if binsec result status is unknown
     description: 'do not raise an error if binsec cannot conclude on the tested implementation'
     required: false
@@ -25,6 +25,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup Rust toolchains
+      shell: bash
+      run: |
+        rustup target add thumbv7em-none-eabihf
+        rustup target add riscv32imac-unknown-none-elf
+
     - name: Install Binsec
       shell: bash
       run: |
@@ -38,21 +44,13 @@ runs:
         git clone https://github.com/binsec/binsec
         git clone https://github.com/binsec/unisim_archisec
 
-        pushd binsec
-        if  [[ $BINSEC_VERSION == "latest" ]]; then
-          git checkout --quiet $(git describe --tags `git rev-list --tags --max-count=1`)
-        else
-          git checkout --quiet $BINSEC_VERSION
-        fi
+        pushd unisim_archisec
+        git checkout --quiet $UNISIM_VERSION
         dune build @install && dune install
         popd
 
-        pushd unisim_archisec
-        if  [[ $UNISIM_VERSION == "latest" ]]; then
-          git checkout --quiet $(git describe --tags `git rev-list --tags --max-count=1`)
-        else
-          git checkout --quiet $UNISIM_VERSION
-        fi
+        pushd binsec
+        git checkout --quiet $BINSEC_VERSION
         dune build @install && dune install
         popd
       env:
