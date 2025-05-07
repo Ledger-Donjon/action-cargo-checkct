@@ -7,23 +7,23 @@ inputs:
     required: true
   binsec-version:  # Binsec version to use
     description: 'binsec version'
-    required: false
+    required: true
     default: '0.10.0'
   unisim-version:  # Unisim_archisec version to use
     description: 'unisim_archisec version'
-    required: false
+    required: true
     default: '0.0.10'
   cargo-checkct-ref:  # Cargo-checkct's reference to use
     description: 'Cargo-checkct reference'
-    required: false
+    required: true
     default: 'f7bc61f5ad08dedece61ec199911f6ecd3272eeb'
   skip-unknown: # Don't fail if binsec result status is unknown
     description: 'do not raise an error if binsec cannot conclude on the tested implementation'
-    required: false
+    required: true
     default: 'false'
   timeout: # Timeout
     description: 'cargo-checktct timeout in seconds'
-    required: false
+    required: true
     default: '600'
 
 runs:
@@ -45,8 +45,8 @@ runs:
         opam install -y dune dune-site menhir grain_dypgen ocamlgraph zarith toml bitwuzla
         eval $(opam env)
 
-        git clone -b $UNISIM_VERSION https://github.com/binsec/binsec
-        git clone -b $BINSEC_VERSION https://github.com/binsec/unisim_archisec
+        git clone --branch "$BINSEC_VERSION" https://github.com/binsec/binsec
+        git clone --branch "$UNISIM_VERSION" https://github.com/binsec/unisim_archisec
 
         pushd unisim_archisec
         dune build @install && dune install
@@ -56,15 +56,14 @@ runs:
         dune build @install && dune install
         popd
       env:
-        BINSEC_VERSION: ${{ inputs.binsec_version }}
-        UNISIM_VERSION: ${{ inputs.unisim_version }}
+        BINSEC_VERSION: ${{ inputs.binsec-version }}
+        UNISIM_VERSION: ${{ inputs.unisim-version }}
 
-    - name: Install cargo-checkct
+    - name: Build cargo-checkct
       run: |
-        git clone https://github.com/Ledger-Donjon/cargo-checkct
+        git clone --revision "$REF" https://github.com/Ledger-Donjon/cargo-checkct
         cd cargo-checkct
-        git checkout "$REF"
-        cargo b --release
+        cargo build --release
       shell: bash
       env:
         REF: ${{ inputs.cargo-checkct-ref }}
@@ -81,4 +80,4 @@ runs:
       env:
         DIRECTORY: ${{ inputs.directory }}
         TIMEOUT: ${{ inputs.timeout }}
-        SKIP_UNKNOWN: ${{ inputs.skip_unknown }}
+        SKIP_UNKNOWN: ${{ inputs.skip-unknown }}
