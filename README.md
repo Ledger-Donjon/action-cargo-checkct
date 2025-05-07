@@ -7,12 +7,22 @@ This GitHub Actions runs [cargo-checkct](https://github.com/Ledger-Donjon/cargo-
 ```yml
 uses: Ledger-Donjon/action-cargo-checkct
 with:
-    directory: ./example
+    directory: ./target_workspace
     binsec-version: 0.10.0
     unisim-version: 0.0.10
+    cargo-checkct-ref: f7bc61f5ad08dedece61ec199911f6ecd3272eeb
     skip_unknown: false
     timeout: 600
 ```
+
+Or if using the default parameters values:
+```yml
+uses: Ledger-Donjon/action-cargo-checkct
+with:
+    directory: ./target_workspace
+```
+
+*Note: This composite action only runs on `ubuntu-latest` based workflows.* 
 
 ### Parameter: directory
 
