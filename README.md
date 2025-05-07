@@ -33,22 +33,32 @@ This parameter is mandatory.
 
 ### Parameter: binsec-version
 
-Enforce the used `binsec` version.
+Enforce the `binsec` version used.
 
 This parameter is optional. By default the latest `binsec` version will be used.
 
 
 ### Parameter: unisim-version
 
-Enforce the used `unisim-archsec` version.
+Enforce the `unisim-archsec` version used.
 
 This parameter is optional. By default the latest `unisim-archsec` version will be used.
+
+
+### Parameter: cargo-checkct-ref
+
+Enforce the `cargo-checkct` reference used.
+
+This parameter is optional. By default the a commit is fixed to a tested `cargo-checkct` version
+for the default `binsec` and `unisim-archsec` versions. But it could also be set to `main` for instance.
+
 
 ### Parameter: skip_unknown
 
 Do not raise an error if `binsec` cannot conclude on the tested implementation.
 
 This parameter is optional. By default, the flag is not set (`false`).
+
 
 ### Parameter: timeout
 
