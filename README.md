@@ -5,7 +5,7 @@ This GitHub Actions runs [cargo-checkct](https://github.com/Ledger-Donjon/cargo-
 ## Usage
 
 ```yml
-uses: Ledger-Donjon/action-cargo-checkct
+uses: Ledger-Donjon/action-cargo-checkct@v1
 with:
     directory: ./target_workspace
     binsec-version: 0.10.0
