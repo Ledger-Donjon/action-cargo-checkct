@@ -17,7 +17,7 @@ with:
 
 Or if using the default parameters values:
 ```yml
-uses: Ledger-Donjon/action-cargo-checkct
+uses: Ledger-Donjon/action-cargo-checkct@v1
 with:
     directory: ./target_workspace
 ```
